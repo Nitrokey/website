@@ -8,6 +8,7 @@ setuptools.setup(
     description="Meta package for oca-website Odoo addons",
     version=version,
     install_requires=[
+        'odoo12-addon-website_adv_image_optimization',
         'odoo12-addon-website_anchor_smooth_scroll',
         'odoo12-addon-website_blog_excerpt_img',
         'odoo12-addon-website_breadcrumb',
@@ -21,12 +22,16 @@ setuptools.setup(
         'odoo12-addon-website_google_tag_manager',
         'odoo12-addon-website_img_dimension',
         'odoo12-addon-website_js_below_the_fold',
+        'odoo12-addon-website_js_below_the_fold_payment',
         'odoo12-addon-website_lazy_load_image',
         'odoo12-addon-website_legal_page',
         'odoo12-addon-website_logo',
         'odoo12-addon-website_media_size',
+        'odoo12-addon-website_megamenu',
+        'odoo12-addon-website_menu_by_user_status',
         'odoo12-addon-website_no_crawler',
         'odoo12-addon-website_odoo_debranding',
+        'odoo12-addon-website_portal_contact',
         'odoo12-addon-website_snippet_anchor',
         'odoo12-addon-website_snippet_big_button',
         'odoo12-addon-website_snippet_country_dropdown',
@@ -35,5 +40,6 @@ setuptools.setup(
     classifiers=[
         'Programming Language :: Python',
         'Framework :: Odoo',
+        'Framework :: Odoo :: 12.0',
     ]
 )

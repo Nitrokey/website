@@ -17,11 +17,12 @@ class Website(models.Model):
 
     @api.constrains('canonical_domain')
     def _check_canonical_domain(self):
-        domain = self.canonical_domain
-        if domain and not urlparse(domain).scheme:
-            raise exceptions.ValidationError(_(
-                'Canonical domain must contain protocol `http(s)://`'
-            ))
+        for one in self:
+            domain = one.canonical_domain
+            if domain and not urlparse(domain).scheme:
+                raise exceptions.ValidationError(_(
+                    'Canonical domain must contain protocol `http(s)://`'
+                ))
 
     @api.multi
     def get_canonical_url(self, req=None):
@@ -35,6 +36,8 @@ class Website(models.Model):
         self.ensure_one()
         if self.canonical_domain:
             return self.canonical_domain
+        if self.domain:
+            return self.domain
         params = self.env['ir.config_parameter'].sudo()
         return params.get_param('web.base.url')
 
