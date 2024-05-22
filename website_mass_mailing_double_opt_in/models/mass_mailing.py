@@ -1,3 +1,7 @@
+# © 2024 initOS GmbH
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+import uuid
+
 from odoo import fields, models
 
 
@@ -6,3 +10,56 @@ class MailingContactSubscription(models.Model):
 
     access_token = fields.Char(copy=False)
     mail_language = fields.Char()
+
+    def double_opt_in_mail_template(self):
+        return self.env.ref(
+            "website_mass_mailing_double_opt_in.newsletter_confirmation_request_template"
+        )
+
+    def consent_mail_template(self):
+        return self.env.ref(
+            "website_mass_mailing_double_opt_in.newsletter_confirmation_success_template"
+        )
+
+    def double_opt_in_subscribe(self, list_id, email, language):
+        contacts = self.env["mailing.contact"]
+        name, email = contacts.get_name_email(email)
+
+        existing_contact = contacts.search(
+            [("list_ids", "=", int(list_id)), ("email", "=", email)], limit=1
+        )
+        if existing_contact.opt_out:
+            existing_contact.opt_out = False
+            return email
+
+        # inline add_to_list as we've already called half of it
+        contact_id = contacts.search([("email", "=", email)], limit=1)
+        mailing_list_contact = None
+        created = False
+        if not contact_id:
+            contact_id = contacts.create({"name": name, "email": email})
+            created = True
+            mailing_list_contact = contact_id.subscription_list_ids.filtered(
+                lambda c: c.list_id.id == int(list_id)
+            )
+
+        if not mailing_list_contact:
+            created = True
+            mailing_list_contact = self.create(
+                {"contact_id": contact_id.id, "list_id": list_id, "opt_out": True}
+            )
+
+        if created:
+            mailing_list_contact.write(
+                {
+                    "opt_out": True,
+                    "access_token": str(uuid.uuid4().hex),
+                    "mail_language": language,
+                }
+            )
+            template = self.double_opt_in_mail_template().sudo()
+            template.with_context(lang=language).send_mail(
+                mailing_list_contact.id, force_send=True
+            )
+
+        return email

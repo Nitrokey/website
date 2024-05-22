@@ -1,4 +1,6 @@
-# License AGPL-3.0.
+# © 2024 initOS GmbH
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+
 {
     "name": "Website Mass Mailing Double opt-in",
     "version": "15.0.1.0.0",
@@ -23,7 +25,6 @@
         "security/mass_mailing_security.xml",
         "security/ir.model.access.csv",
         "data/mail_template.xml",
-        "data/newsletter.xml",
         "views/mass_mailing_view.xml",
         "views/invalid_confirmation.xml",
         "views/unsubscribe_templates.xml",

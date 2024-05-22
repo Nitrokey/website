@@ -4,7 +4,7 @@
         <field name="name">Newsletter Subscription</field>
         <field name="subject">Confirm your newsletter subscription</field>
         <field name="model_id" ref="mass_mailing.model_mailing_contact_subscription" />
-        <field name="email_to">${object.contact_id.email}</field>
+        <field name="email_to">{{ object.contact_id.email }}</field>
         <field name="body_html" type="xml">
             <div style="margin: -10px -10px; padding:50px 30px 50px 30px; height:100%;">
                 <div style="margin:0 auto; max-width:660px;">
@@ -42,7 +42,7 @@
                                     style="line-height: 21px; font-family: Helvetica, Verdana, Arial, sans-serif; font-size: 12px; margin-bottom: 25px; padding: 15px; text-align: center;"
                                 >
                                     <a
-                                        href="/newsletter/confirmation/${object.access_token}"
+                                        t-attf-href="/newsletter/confirmation/{{ object.access_token }}"
                                         style="background-color: #449d44; padding: 12px; font-weight: 12px; text-decoration: none; color: #fff; border-radius: 5px; font-size:16px;"
                                     >Confirm
                                     </a>
@@ -54,48 +54,7 @@
                             </div>
                         </div>
                     </div>
-                    <div style="max-width: 532px; background-color: #14212D;">
-                        <table style="margin-left: 15px;">
-                            <tr>
-                                <td
-                                    class="text"
-                                    colspan="2"
-                                    style="color: #FFFFFF;font-family: Arial;font-size: 13px;letter-spacing: 0;line-height: 17px;"
-                                >
-                                    <br />
-                                    <strong>${user.company_id.name}</strong>
-                                    <br />
-
-                                    % if user.company_id.street:
-                                    ${user.company_id.street},
-                                    % endif
-                                    % if user.company_id.street2:
-                                    ${user.company_id.street2},
-                                    % endif
-                                    % if user.company_id.city or user.company_id.zip:
-                                    ${user.company_id.zip} ${user.company_id.city},
-                                    % endif
-                                    % if user.company_id.country_id:
-                                    ${user.company_id.state_id and user.company_id.state_id.name or ''}
-                                    ${user.company_id.country_id.name or ''}
-                                    % endif
-                                    <br />
-                                    <br />
-                                    <strong>CEO:</strong>${user.company_id.ceo or ''}
-                                    <br />
-                                    <strong
-                                    >Company register:</strong>${user.company_id.company_registry or ''}
-                                    <br />
-                                    <strong>VAT ID:</strong>${user.company_id.vat or ''}
-                                    <br />
-                                    <br />
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <br />
                 </div>
-
             </div>
         </field>
     </record>
@@ -106,54 +65,15 @@
         <field name="model_id" ref="mass_mailing.model_mailing_contact_subscription" />
         <field name="email_to">${object.contact_id.email}</field>
         <field name="body_html" type="xml">
-            <p>Hi!</p>
-            <p>Thank you for subscribing the newsletter.</p>
-            <br />
-            <p>Best regards,
+            <div>
+                <p>Hi!</p>
+                <p>Thank you for subscribing the newsletter.</p>
                 <br />
-                your team
-            </p>
-
-            <div style="background-color: #14212D;">
-                <table style="margin-left: 15px;">
-                    <tr>
-                        <td
-                            class="text"
-                            colspan="2"
-                            style="color: #FFFFFF;font-family: Arial;font-size: 13px;letter-spacing: 0;line-height: 17px;"
-                        >
-                            <br />
-                            <strong>${user.company_id.name}</strong>
-                            <br />
-
-                            % if user.company_id.street:
-                            ${user.company_id.street},
-                            % endif
-                            % if user.company_id.street2:
-                            ${user.company_id.street2},
-                            % endif
-                            % if user.company_id.city or user.company_id.zip:
-                            ${user.company_id.zip} ${user.company_id.city},
-                            % endif
-                            % if user.company_id.country_id:
-                            ${user.company_id.state_id and user.company_id.state_id.name or ''}
-                            ${user.company_id.country_id.name or ''}
-                            % endif
-                            <br />
-                            <br />
-                            <strong>CEO:</strong>${user.company_id.ceo or ''}
-                            <br />
-                            <strong
-                            >Company register:</strong>${user.company_id.company_registry or ''}
-                            <br />
-                            <strong>VAT ID:</strong>${user.company_id.vat or ''}
-                            <br />
-                            <br />
-                        </td>
-                    </tr>
-                </table>
+                <p>Best regards,
+                    <br />
+                    your team
+                </p>
             </div>
-            <br />
         </field>
     </record>
 
