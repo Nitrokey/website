@@ -26,27 +26,26 @@ class MailingContactSubscription(models.Model):
         name, email = contacts.get_name_email(email)
 
         existing_contact = contacts.search(
-            [("list_ids", "=", int(list_id)), ("email", "=", email)], limit=1
+            [("list_ids", "=", list_id), ("email", "=", email)], limit=1
         )
         if existing_contact.opt_out:
             existing_contact.opt_out = False
             return email
 
         # inline add_to_list as we've already called half of it
-        contact_id = contacts.search([("email", "=", email)], limit=1)
-        mailing_list_contact = None
+        contact = contacts.search([("email", "=", email)], limit=1)
         created = False
-        if not contact_id:
-            contact_id = contacts.create({"name": name, "email": email})
+        if not contact:
+            contact = contacts.create({"name": name, "email": email})
             created = True
-            mailing_list_contact = contact_id.subscription_list_ids.filtered(
-                lambda c: c.list_id.id == int(list_id)
-            )
+
+        domain = [("contact_id", "=", contact.id), ("list_id", "=", list_id)]
+        mailing_list_contact = self.search(domain)
 
         if not mailing_list_contact:
             created = True
             mailing_list_contact = self.create(
-                {"contact_id": contact_id.id, "list_id": list_id, "opt_out": True}
+                {"contact_id": contact.id, "list_id": list_id, "opt_out": True}
             )
 
         if created:
